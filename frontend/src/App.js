@@ -1,37 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
+// src/App.js
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import NavBar from "./components/NavBar";
+import Home from "./pages/Home";
+import ReviewNew from "./pages/ReviewNew";
+import Footer from "./components/Footer";
+import PropertyShow from "./pages/PropertyShow";
 
-function App() {
-  const [users, setUsers] = useState([]);
 
+
+export default function App() {
+  // create/restore anonymous session
   useEffect(() => {
-    fetch('http://localhost:8210/api/users')
-      .then(res => res.json())
-      .then(setUsers)
-      .catch(err => console.error('Error fetching users:', err));
+    fetch("http://localhost:8210/api/session", {
+      credentials: "include", // IMPORTANT so cookie is stored/sent
+    }).catch(() => {});
   }, []);
 
-
   return (
-    <div className="App">
-      <h1>Users</h1>
-      {users.length > 0 ? (
-        <ul>
-          {users.map((user, index) => (
-            <li key={index}>
-              {Object.entries(user).map(([key, value]) => (
-                <span key={key}>
-                  <strong>{key}</strong>: {value}{" | "}
-                </span>
-              ))}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No users found.</p>
-      )}
-    </div>
+    <BrowserRouter>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+
+        <Route path="/reviews/new" element={<ReviewNew />} />
+        <Route path="/properties/:id" element={<PropertyShow />} />
+
+        
+  
+      </Routes>
+      <Footer />
+    </BrowserRouter>
   );
 }
-
-export default App;
