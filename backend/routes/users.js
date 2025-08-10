@@ -1,17 +1,17 @@
-const express = require('express');
+// backend/routes/users.js
+const express = require("express");
 const router = express.Router();
+const conn = require("../dbconn"); // import db connection
 
-module.exports = (pool) => {
-  // GET all users
-  router.get('/', (req, res) => {
-    pool.query('SELECT * FROM User', (err, results) => {
-      if (err) {
-        console.error('Error fetching users:', err);
-        return res.status(500).json({ error: 'Database error' });
-      }
-      res.json(results);
-    });
-  });
+// GET all users
+router.get("/", async (req, res) => {
+  try {
+    const [rows] = await conn.query("SELECT * FROM User");
+    res.json(rows);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
 
-  return router;
-};
+module.exports = router;

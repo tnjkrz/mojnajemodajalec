@@ -1,43 +1,47 @@
-const express = require('express');
-const mysql = require('mysql2');
-const path = require('path');
-require('dotenv').config();
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || 8210;
+const port = process.env.PORT || 8210;
 
-// DB pool (your server DB)
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'studenti',
-  password: process.env.DB_PASS || 'S039C8R7',
-  database: process.env.DB_DATABASE || 'SISIII2025_89221132',
-  port: 3306
-});
+// Middleware
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  })
+);
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
 
-// Health
-app.get('/api/health', (_req, res) => res.json({ ok: true }));
+// Import Routes
+const usersRouter = require("./routes/users");
 
-// Users (returns everything from table User)
-app.get('/api/users', (_req, res) => {
-  pool.query('SELECT * FROM User', (err, rows) => {
-    if (err) {
-      console.error('Error fetching users:', err);
-      return res.status(500).json({ error: 'db_error' });
-    }
-    res.json(rows);
-  });
+
+// Routes
+
+app.use("/api/users", usersRouter);
+
+
+// Error handling for unknown routes
+app.use((req, res, next) => {
+  res.status(404).json({ message: "404: Page not found" });
 });
 
-// Serve React build (no path pattern → no path-to-regexp issues)
-const buildPath = path.join(__dirname, '../frontend/build');
-app.use(express.static(buildPath));
-app.use((req, res) => {
-  res.sendFile(path.join(buildPath, 'index.html'));
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res
+    .status(500)
+    .json({ message: "Internal Server Error", error: err.message });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });

@@ -5,15 +5,12 @@ function App() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch('/api/users')
+    fetch('http://localhost:8210/api/users')
       .then(res => res.json())
-      .then(data => {
-        setUsers(data);
-      })
-      .catch(err => {
-        console.error('Error fetching users:', err);
-      });
+      .then(setUsers)
+      .catch(err => console.error('Error fetching users:', err));
   }, []);
+
 
   return (
     <div className="App">
