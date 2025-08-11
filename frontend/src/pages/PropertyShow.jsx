@@ -64,10 +64,10 @@ export default function PropertyShow() {
   const catAverages = useMemo(() => {
     const cats = [
       ["communication_score","Komunikacija"],
-      ["repairs_score","Vzdrževanje in popravila"],
       ["moving_score","Vselitev / izselitev"],
-      ["health_safety_score","Zdravje in varnost"],
       ["privacy_score","Zasebnost"],
+      ["repairs_score","Vzdrževanje in popravila"],
+      ["health_safety_score","Zdravje in varnost"],
     ];
     if (!data?.reviews?.length) return [];
     return cats.map(([key,label])=>{
@@ -138,7 +138,7 @@ export default function PropertyShow() {
               </div>
             </div>
             <div className="summary-sep" aria-hidden="true" />
-            <div className="bar-cols">
+            <div className="bar-cols" style={{ marginTop: 12 }} >
               <div className="bar-col">
                 {catAverages.slice(0,3).map(c=>(
                   <div key={c.key} className="bar-row">
