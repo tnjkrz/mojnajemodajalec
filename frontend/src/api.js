@@ -48,7 +48,9 @@ async function del(path) {
     method: "DELETE",
     credentials: "include",
   });
-  return handle(res, "DELETE", path);
+  let data; try { data = await res.json(); } catch { data = {}; }
+  if (!res.ok) throw new Error(data?.error || `DELETE ${path} ${res.status}`);
+  return data;
 }
 
 export const api = { BASE, get, post, put, del };
