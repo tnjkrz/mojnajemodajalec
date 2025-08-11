@@ -8,16 +8,15 @@ import ReviewNew from "./pages/ReviewNew";
 import Footer from "./components/Footer";
 import PropertyShow from "./pages/PropertyShow";
 import Admin from "./pages/Admin";
-import AboutUs from "./pages/AboutUs"; 
+import AboutUs from "./pages/AboutUs";
 import Rules from "./pages/Rules";
-
-
+import { api } from "./api"; // 
 
 export default function App() {
-  // create/restore anonymous session
+  
   useEffect(() => {
-    fetch("http://localhost:8210/api/session", {
-      credentials: "include", // IMPORTANT so cookie is stored/sent
+    fetch(`${api.BASE}/api/session`, {
+      credentials: "include",
     }).catch(() => {});
   }, []);
 
@@ -26,16 +25,11 @@ export default function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
-
-
         <Route path="/reviews/new" element={<ReviewNew />} />
         <Route path="/properties/:id" element={<PropertyShow />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/about" element={<AboutUs />} /> 
-          <Route path="/pravila" element={<Rules />} />
-
-        
-  
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/pravila" element={<Rules />} />
       </Routes>
       <Footer />
     </BrowserRouter>
