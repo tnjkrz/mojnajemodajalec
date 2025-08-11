@@ -15,12 +15,12 @@ app.use(
 );
 app.use(express.json());
 
-// session cookie -> creates anonymous user if missing (for normal users)
+// session cookie --> creates anonymous user if missing (for normal users)
 const session = require("./middleware/session");
 const banGuard = require("./middleware/ban-guard");
 app.use(session);
 
-// user-facing routes
+// routes
 app.use("/api/search", require("./routes/search"));
 app.use("/api/reviews", banGuard, require("./routes/reviews"));
 app.use("/api/reports", banGuard, require("./routes/reports"));
@@ -29,7 +29,7 @@ app.use("/api/properties", banGuard, require("./routes/properties"));
 
 // admin auth (no cookies, JWT in Authorization header)
 app.use("/api/admin/auth", require("./routes/adminAuth"));
-// protected admin operations (uses JWT, enforced inside the file)
+// protected admin operations  --> uses JWT, enforced inside the file
 app.use("/api/admin", require("./routes/admin"));
 
 app.use((req, res) => res.status(404).json({ message: "404" }));

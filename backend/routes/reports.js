@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const conn = require("../dbconn");
 
-// POST /api/reports
-// body: { target_type: 'property'|'landlord'|'review', target_id: number, reason: string, other_text?: string }
+// create a new report
 router.post("/", async (req, res) => {
   try {
     const b = req.body || {};
@@ -24,7 +23,7 @@ router.post("/", async (req, res) => {
     const finalReason = (reason === "Drugo" && other_text)
       ? `${reason}: ${other_text}` : reason;
 
-    // DEBUG: log what we will insert
+    // debugging 
     console.log("REPORT NEW", {
       reporter_user_id,
       target_type,
@@ -32,7 +31,7 @@ router.post("/", async (req, res) => {
       finalReason,
     });
 
-    // Insert explicitly setting nullable columns to NULL where appropriate
+    // insert the report into the database
     const sql = `
       INSERT INTO Report
         (reporter_user_id, resolved_by_user_id, target_type, target_id, reason, created_at, status)
@@ -43,12 +42,12 @@ router.post("/", async (req, res) => {
 
     return res.status(201).json({ ok: true });
   } catch (e) {
-    console.error("report insert error:", e); // <-- this will show the exact MySQL error
+    console.error("report insert error:", e); // debugging, report errors
     return res.status(500).json({ error: "db_error" });
   }
 });
 
-// routes/reports.js
+// get all reports
 router.get("/", async (req, res) => {
   try {
     const [rows] = await conn.query(`

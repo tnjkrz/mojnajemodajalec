@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { api } from "../api";
 
-// read-only yellow stars
+// helper for displaying read-only stars
 function ReadOnlyStars({ value = 0, size = 16 }) {
   const v = Math.max(0, Math.min(5, Number(value) || 0));
   const full = Math.round(v);
@@ -239,7 +239,7 @@ export default function PropertyShow() {
 
             <div className="actions" style={{ marginTop: 10 }}>
               <button className="btn" onClick={()=>setReportOpen(false)}>Prekliči</button>
-              <button className="btn btn--solid" disabled={!canSendReport} onClick={submitReport}>Pošlji prijavo</button>
+              <button className="btn btn--solid" disabled={!canSendReport} onClick={submitReport} style={{fontSize: "13px"}}>Pošlji prijavo</button>
             </div>
           </div>
         </div>

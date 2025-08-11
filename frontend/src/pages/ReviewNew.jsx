@@ -48,7 +48,7 @@ export default function ReviewNew() {
   // ---------- live search: landlord (debounced, no panel closing) ----------
   useEffect(() => {
     const q = qL.trim();
-    setSelectedLandlord(null); // typing cancels selection, but don't close panel
+    setSelectedLandlord(null); // typing cancels selection, but does not close panel
     if (q.length < 2) { setLandlordResults([]); setShowLDrop(false); return; }
     setShowLDrop(true);
     const t = setTimeout(async () => {
@@ -75,7 +75,7 @@ export default function ReviewNew() {
     return () => clearTimeout(t);
   }, [qP]);
 
-  // click-outside: close dropdowns
+  // close dropdowns on outside click
   useEffect(() => {
     function onDocClick(e) {
       if (lWrapRef.current && !lWrapRef.current.contains(e.target)) setShowLDrop(false);
@@ -85,7 +85,7 @@ export default function ReviewNew() {
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
-  // selecting existing landlord/property → prefill + open panel + close dropdown
+  // open add panels when selecting from results
   useEffect(() => {
     if (selectedLandlord) {
       setAddLandlordOpen(true);
@@ -110,7 +110,7 @@ export default function ReviewNew() {
     }
   }, [selectedProperty]);
 
-  // user chose "add new" → open blank panel, clear search, hide dropdown, focus first field
+  // open add panels from query
   function openAddLandlordFromQuery() {
     setAddLandlordOpen(true);
     setSelectedLandlord(null);

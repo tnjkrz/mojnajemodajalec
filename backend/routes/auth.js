@@ -3,7 +3,7 @@ const router = express.Router();
 const crypto = require("crypto");
 const conn = require("../dbconn");
 
-// Ensure a user row has a session_hash; return it
+// ensure a user row has a session_hash -> return it
 async function ensureSessionHash(user_id) {
   const [[u]] = await conn.query("SELECT session_hash FROM User WHERE user_id = ?", [user_id]);
   if (u && u.session_hash) return u.session_hash;
@@ -12,7 +12,7 @@ async function ensureSessionHash(user_id) {
   return sid;
 }
 
-// Who am I (handy for the client)
+// who am I checker
 router.get("/me", async (req, res) => {
   try {
     if (!req.user_id) return res.json({ user_id: null, role: "anonymous" });
@@ -27,7 +27,7 @@ router.get("/me", async (req, res) => {
   }
 });
 
-// Login (admin)
+// login (admin)
 router.post("/login", async (req, res) => {
   const { username, password } = req.body || {};
   if (!username || !password) return res.status(400).json({ error: "missing_fields" });
@@ -51,7 +51,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Logout
+// logout
 router.post("/logout", (req, res) => {
   res.setHeader("Set-Cookie", "sid=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0");
   res.json({ ok: true });

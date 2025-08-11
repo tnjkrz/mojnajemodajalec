@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const conn = require("../dbconn");
 
-// tiny cookie reader
+// cookie reader
 function getCookie(req, name) {
   const header = req.headers.cookie || "";
   for (const part of header.split(";")) {
@@ -18,14 +18,14 @@ module.exports = async function session(req, res, next) {
 
     if (!sid) {
       // create new session id + anonymous user
-      sid = crypto.randomBytes(16).toString("hex"); // 32 chars
+      sid = crypto.randomBytes(16).toString("hex"); 
       const [r] = await conn.query(
         "INSERT INTO User (role, username, password, is_banned, session_hash) VALUES ('anonymous', NULL, '', 0, ?)",
         [sid]
       );
       req.user_id = r.insertId;
 
-      // set cookie (HttpOnly for security)
+      // set cookie 
       res.setHeader(
         "Set-Cookie",
         `sid=${encodeURIComponent(sid)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${60 * 60 * 24 * 365}`
@@ -39,7 +39,7 @@ module.exports = async function session(req, res, next) {
       if (rows.length) {
         req.user_id = rows[0].user_id;
       } else {
-        // cookie exists but no user → recreate anonymous user bound to sid
+        // cookie exists but no user then we recreate anonymous user bound to sid
         const [r] = await conn.query(
           "INSERT INTO User (role, username, password, is_banned, session_hash) VALUES ('anonymous', NULL, '', 0, ?)",
           [sid]

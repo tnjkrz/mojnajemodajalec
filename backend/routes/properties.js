@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const conn = require("../dbconn");
 
-// Create property, but reuse existing if landlord+address match
+// create property, but reuse existing if landlord+address match
 router.post("/", async (req, res) => {
   const b = req.body || {};
   const landlord_id = Number(b.landlord_id) || null;
@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    // Try to reuse existing (case-insensitive, space-normalized)
+    // try to reuse existing 
     const [found] = await conn.query(
       `SELECT property_id
          FROM Property

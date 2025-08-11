@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const pool = require("../dbconn");
 
-/* ---------------- JWT admin guard (no cookies) ---------------- */
+//  JWT admin guard (no cookies)
 
 function requireAdmin(req, res, next) {
   try {
@@ -39,9 +39,8 @@ async function withTx(run) {
   }
 }
 
-/* ---------------- list reports ---------------- */
+// list reports
 
-// GET /api/admin/reports
 router.get("/reports", requireAdmin, async (req, res) => {
   try {
     const [rows] = await pool.query(`
@@ -82,9 +81,8 @@ router.get("/reports", requireAdmin, async (req, res) => {
   }
 });
 
-/* ---------------- update report status ---------------- */
-
-// PUT /api/admin/reports/:id   { status: 'resolved'|'dismissed'|'pending' }
+// update report status
+  
 router.put("/reports/:id", requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
   const { status } = req.body || {};
@@ -100,9 +98,8 @@ router.put("/reports/:id", requireAdmin, async (req, res) => {
   }
 });
 
-/* ---------------- ban / unban ---------------- */
+// ban / unban 
 
-// POST /api/admin/ban  { user_id, banned: true|false }
 router.post("/ban", requireAdmin, async (req, res) => {
   const { user_id, banned } = req.body || {};
   const id = Number(user_id);
@@ -116,7 +113,6 @@ router.post("/ban", requireAdmin, async (req, res) => {
   }
 });
 
-// GET /api/admin/banned  -> list of banned users
 router.get("/banned", requireAdmin, async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -129,7 +125,7 @@ router.get("/banned", requireAdmin, async (req, res) => {
   }
 });
 
-/* ---------------- cascaded deletes (keep Report rows) ---------------- */
+// cascaded deletes but keeps Report rows
 
 async function deletePropertyCascade(conn, property_id) {
   const [[p]] = await conn.query(
@@ -199,7 +195,8 @@ async function deleteReviewCascade(conn, review_id) {
   return { ok: true, propertyDeleted: false, landlordDeleted: false };
 }
 
-// DELETE /api/admin/delete/:type/:id
+
+
 router.delete("/delete/:type/:id", requireAdmin, async (req, res) => {
   const type = String(req.params.type || "").toLowerCase();
   const id = Number(req.params.id);

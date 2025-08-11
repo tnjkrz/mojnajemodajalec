@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const conn = require("../dbconn");
 
-// Create landlord, but reuse existing if same first+last already exists.
+// create landlord, but reuse existing if same first+last already exists
 router.post("/", async (req, res) => {
   const b = req.body || {};
   const first = String(b.first_name || "").trim();
@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    // Try to reuse existing (case-insensitive, space-normalized)
+    // try to reuse existing 
     const [found] = await conn.query(
       `SELECT landlord_id
          FROM Landlord
@@ -24,11 +24,11 @@ router.post("/", async (req, res) => {
     );
 
     if (found.length) {
-      // Reuse existing landlord
+      // reuse existing landlord
       return res.status(200).json({ landlord_id: found[0].landlord_id, reused: true });
     }
 
-    // Otherwise create new
+    // else, create new
     const [r] = await conn.query(
       `INSERT INTO Landlord (first_name, last_name, user_id)
        VALUES (?,?,?)`,

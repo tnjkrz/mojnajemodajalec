@@ -2,20 +2,19 @@ const express = require("express");
 const router = express.Router();
 const conn = require("../dbconn");
 
-// GET /api/search?q=...
-// Returns properties with landlord info where EITHER landlord name OR address matches.
-// Shape: { properties: [{ property_id, street, house_number, city, postal_code, landlord_id, first_name, last_name }] }
+
+// returns properties with landlord info where EITHER landlord name OR address matches.
 router.get("/", async (req, res) => {
   const q = String(req.query.q || "").trim();
   if (!q || q.length < 2) {
     return res.json({ properties: [], landlords: [] });
   }
 
-  // Use %q% for LIKE
+  // prepare search query
   const like = `%${q}%`;
 
   try {
-    // 1) Properties joined with landlords (primary list you’ll render)
+    // 1) properties joined with landlords 
     const [props] = await conn.query(
       `
       SELECT
@@ -42,7 +41,7 @@ router.get("/", async (req, res) => {
       [like, like, like, like, like, like, like, like]
     );
 
-    // 2) (Optional) landlords list for future use (if you want to show a “see all properties by …”)
+    // 2) landlords list for future use 
     const [lands] = await conn.query(
       `
       SELECT landlord_id, first_name, last_name

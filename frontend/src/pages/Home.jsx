@@ -23,7 +23,7 @@ export default function Home() {
     const t = setTimeout(async () => {
       try {
         const data = await api.get(`/api/search?q=${encodeURIComponent(term)}`);
-        // We expect data.properties: [{ property_id, street, house_number, city, postal_code, landlord_id, first_name?, last_name? }]
+        // map results to a simpler format
         const props = (data.properties || []).map(p => ({
           id: p.property_id,
           address: `${p.street} ${p.house_number}${p.city ? ", " + p.city : ""}`,
@@ -37,7 +37,7 @@ export default function Home() {
     return () => clearTimeout(t);
   }, [q]);
 
-  // click-outside to close dropdown
+  // close dropdown on outside click
   useEffect(() => {
     function onDocClick(e) {
       if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false);

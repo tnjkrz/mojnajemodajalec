@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const conn = require("../dbconn");
 
-// GET /api/admin/auth/me  -> check token in Authorization header
+// check token in Authorization header
 router.get("/me", async (req, res) => {
   try {
     const auth = req.headers.authorization || "";
@@ -22,7 +22,7 @@ router.get("/me", async (req, res) => {
   }
 });
 
-// POST /api/admin/auth/login  { username, password }  -> returns { token }
+// login with username and password
 router.post("/login", async (req, res) => {
   const { username, password } = req.body || {};
   if (!username || !password) return res.status(400).json({ error: "missing_fields" });
@@ -41,7 +41,7 @@ router.post("/login", async (req, res) => {
       process.env.ADMIN_JWT_SECRET || "dev_admin_secret_change",
       { expiresIn: "12h" }
     );
-    // no cookies set — return token only
+    // no cookies set -> return token only
     res.json({ token });
   } catch (e) {
     console.error("admin login error:", e);
@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// POST /api/admin/auth/logout  -> client just drops the token
+// client just drops the token
 router.post("/logout", (req, res) => {
   res.json({ ok: true });
 });

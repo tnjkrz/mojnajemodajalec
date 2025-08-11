@@ -1,5 +1,7 @@
 const conn = require("../dbconn");
 
+// checks if the user is banned and prevents access if so
+
 module.exports = async function banGuard(req, res, next) {
   try {
     if (!req.user_id) return next(); // anonymous should have a user row via session
@@ -15,4 +17,3 @@ module.exports = async function banGuard(req, res, next) {
   }
   next();
 };
-// This middleware checks if the user is banned and prevents access if so

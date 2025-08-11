@@ -89,7 +89,7 @@ export default function Admin() {
     }
   }
 
-  // FIXED: no comma-expression / no-unused-expressions
+  // load user info on mount or when token changes
   useEffect(() => {
     if (token) {
       loadMe();
@@ -228,7 +228,7 @@ export default function Admin() {
         <button className="btn" onClick={logout}>Odjava (admin)</button>
       </div>
 
-      {/* Reports table */}
+      {/* reports table */}
       <div className="card" style={{ padding: 12, marginTop: 12 }}>
         {tableErr && <div style={{ color: "crimson", marginBottom: 8 }}>{tableErr}</div>}
 
@@ -328,7 +328,7 @@ export default function Admin() {
         )}
       </div>
 
-      {/* Ban by ID + Banned list */}
+      {/* ban by ID + banned list */}
       <div className="card" style={{ padding: 12, marginTop: 16 }}>
         <h2 style={{ marginTop: 0 }}>Blokiranje uporabnikov</h2>
         <p className="small" style={{ color: "var(--muted)" }}>

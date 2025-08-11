@@ -1,7 +1,6 @@
-// backend/routes/users.js
 const express = require("express");
 const router = express.Router();
-const conn = require("../dbconn"); // import db connection
+const conn = require("../dbconn"); 
 
 // GET all users
 router.get("/", async (req, res) => {

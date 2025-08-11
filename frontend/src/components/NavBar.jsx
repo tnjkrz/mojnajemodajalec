@@ -1,4 +1,3 @@
-// src/components/NavBar.jsx
 import { NavLink, Link } from "react-router-dom";
 
 export default function NavBar() {
