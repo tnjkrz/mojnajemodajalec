@@ -1,10 +1,26 @@
-const BASE = process.env.REACT_APP_API || "http://localhost:8210";
+// src/api.js
+const BASE = (process.env.REACT_APP_API || "http://localhost:8210").replace(/\/+$/, "");
 
-async function get(path) {
-  const res = await fetch(`${BASE}${path}`, { credentials: "include" });
-  let data; try { data = await res.json(); } catch { data = {}; }
-  if (!res.ok) throw new Error(data?.error || `GET ${path} ${res.status}`);
+function qs(params = {}) {
+  const s = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => {
+    if (v !== undefined && v !== null && String(v).length) s.set(k, v);
+  });
+  const str = s.toString();
+  return str ? `?${str}` : "";
+}
+
+async function handle(res, method, path) {
+  let data = {};
+  try { data = await res.json(); } catch {}
+  if (!res.ok) throw new Error(data?.error || `${method} ${path} ${res.status}`);
   return data;
+}
+
+async function get(path, params) {
+  const url = `${BASE}${path}${qs(params)}`;
+  const res = await fetch(url, { credentials: "include" });
+  return handle(res, "GET", path);
 }
 
 async function post(path, body) {
@@ -12,11 +28,27 @@ async function post(path, body) {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body ?? {}),
   });
-  let data; try { data = await res.json(); } catch { data = {}; }
-  if (!res.ok) throw new Error(data?.error || `POST ${path} ${res.status}`);
-  return data;
+  return handle(res, "POST", path);
 }
 
-export const api = { get, post, BASE };
+async function put(path, body) {
+  const res = await fetch(`${BASE}${path}`, {
+    method: "PUT",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body ?? {}),
+  });
+  return handle(res, "PUT", path);
+}
+
+async function del(path) {
+  const res = await fetch(`${BASE}${path}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  return handle(res, "DELETE", path);
+}
+
+export const api = { BASE, get, post, put, del };

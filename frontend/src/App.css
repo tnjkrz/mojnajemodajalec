@@ -494,5 +494,78 @@ textarea.input {
 /* small ghost button in review header */
 .btn.sm { padding:6px 8px; font-size:12px; border-radius:10px; }
 
+/* Summary grid: overall | divider | bars */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (min-width: 880px) {
+  .summary-grid {
+    grid-template-columns: 1fr 12px 1.4fr; /* left | thin sep | bars */
+  }
+}
+.summary-sep {
+  display: none;
+}
+@media (min-width: 880px) {
+  .summary-sep {
+    display: block;
+    height: 56px;
+    align-self: center;
+    border-top: 2px solid #e7ebf2; /* thin light line like screenshot */
+    opacity: .9;
+  }
+}
+
+/* Two columns of bars on the right */
+.bar-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 640px) {
+  .bar-cols {
+    grid-template-columns: 1fr 1fr; /* split categories into two groups */
+    gap: 18px;
+  }
+}
+.bar-col { display: grid; gap: 8px; }
+
+/* Each row: label | track | number */
+.bar-row {
+  display: grid;
+  grid-template-columns: 1fr minmax(140px, 1fr) 34px;
+  align-items: center;
+  gap: 10px;
+}
+.bar-label { font-size: 13px; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-num   { font-weight: 700; font-size: 13px; color: #0f172a; text-align: right; }
+
+/* The slim grey track + blue fill */
+.bar-track {
+  height: 6px;                    /* slim line */
+  background: #e9edf3;            /* light grey like in the ref */
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15,23,42,.4);
+  display: grid; place-items: center;
+  z-index: 50;
+}
+.modal {
+  width: min(560px, 92vw);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(15,23,42,.25);
+  padding: 16px;
+}
+
 
 

@@ -1,4 +1,51 @@
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { api } from "../api";
+
 export default function Home() {
+  const nav = useNavigate();
+
+  // search state
+  const [q, setQ] = useState("");
+  const [results, setResults] = useState([]);
+  const [open, setOpen] = useState(false);
+  const boxRef = useRef(null);
+
+  // live search (debounced)
+  useEffect(() => {
+    const term = q.trim();
+    if (term.length < 2) {
+      setResults([]);
+      setOpen(false);
+      return;
+    }
+    setOpen(true);
+    const t = setTimeout(async () => {
+      try {
+        const data = await api.get(`/api/search?q=${encodeURIComponent(term)}`);
+        // We expect data.properties: [{ property_id, street, house_number, city, postal_code, landlord_id, first_name?, last_name? }]
+        const props = (data.properties || []).map(p => ({
+          id: p.property_id,
+          address: `${p.street} ${p.house_number}${p.city ? ", " + p.city : ""}`,
+          landlord: [p.first_name, p.last_name].filter(Boolean).join(" "),
+        }));
+        setResults(props);
+      } catch {
+        setResults([]);
+      }
+    }, 220);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  // click-outside to close dropdown
+  useEffect(() => {
+    function onDocClick(e) {
+      if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
   return (
     <main>
       {/* Hero */}
@@ -16,10 +63,44 @@ export default function Home() {
             </p>
 
             <form className="search" onSubmit={(e) => e.preventDefault()}>
-              <input
-                className="input"
-                placeholder="Išči najemodajalca ali naslov…"
-              />
+              <div style={{ position: "relative", width: "100%" }} ref={boxRef}>
+                <input
+                  className="input"
+                  placeholder="Išči najemodajalca ali naslov…"
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  onFocus={() => q.trim().length >= 2 && setOpen(true)}
+                />
+                {open && (
+                  <div className="dropdown">
+                    {results.length > 0 ? (
+                      results.map((r) => (
+                        <div
+                          key={r.id}
+                          className="dropdown-item"
+                          onMouseDown={() => nav(`/properties/${r.id}`)}
+                          title="Poglej ocene"
+                        >
+                          <div>
+                            <div className="add-hl">{r.landlord} - {r.address}</div>
+                            
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div
+                        className="dropdown-item dropdown-item--add"
+                        onMouseDown={() => nav("/reviews/new")}
+                      >
+                        <span className="add-text">
+                          <span className="add-hl">Ni zadetkov - </span>
+                          <span className="add-sub">Dodaj oceno!</span>
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </form>
 
             <div className="chips">
@@ -62,29 +143,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Skupnostna pravila */}
-      <section className="section rules">
-        <div className="container rules__grid">
-          <div>
-            <h3>Skupnostna pravila in varnost</h3>
-            <p>
-              Brez žalitev in osebnih podatkov. Neprimerne vsebine lahko
-              prijavite — pregledali jih bomo.
-            </p>
-            <div className="list">
-              <div>• Ocene temeljijo na osebnih izkušnjah uporabnikov.</div>
-              <div>• Vsaka ocena vsebuje kategorije in končno oceno.</div>
-              <div>• Brez slik nepremičnin; poudarek je na izkušnji najema.</div>
-            </div>
-          </div>
-          <div className="rules__actions">
-            <button className="btn btn--ghost">Pravila skupnosti</button>
-            <button className="btn btn--red">Prijavi kršitev</button>
-          </div>
-        </div>
-      </section>
-
     </main>
   );
 }

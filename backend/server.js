@@ -18,6 +18,8 @@ app.use("/api/search", require("./routes/search"));
 app.use("/api/landlords", require("./routes/landlords"));
 app.use("/api/properties", require("./routes/properties"));
 app.use("/api/reviews", require("./routes/reviews"));
+app.use("/api/reports", require("./routes/reports"));
+
 
 app.use((req, res) => res.status(404).json({ message: "404" }));
 app.listen(port, () => console.log(`Server on ${port}`));

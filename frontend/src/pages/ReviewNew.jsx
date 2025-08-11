@@ -222,7 +222,7 @@ export default function ReviewNew() {
                       className="dropdown-item dropdown-item--add"
                       onMouseDown={openAddLandlordFromQuery}
                     >
-                      ➕ Dodaj “{qL.trim()}”
+                      Ni zadetkov - Dodaj najemmodajalca!
                     </div>
                   )}
                 </div>
@@ -291,7 +291,7 @@ export default function ReviewNew() {
                       className="dropdown-item dropdown-item--add"
                       onMouseDown={openAddPropertyFromQuery}
                     >
-                      ➕ Dodaj “{qP.trim()}”
+                      Ni zadetkov - Dodaj nepremičnino!
                     </div>
                   )}
                 </div>
