@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import StarRating from "../components/StarRating";
 import { api } from "../api";
 
+
 export default function ReviewNew() {
   const nav = useNavigate();
 
@@ -382,7 +383,7 @@ export default function ReviewNew() {
 
         <label className="field" style={{ display:"flex", alignItems:"center", gap:8, marginTop:6 }}>
           <input type="checkbox" checked={agree} onChange={(e)=>setAgree(e.target.checked)} />
-          <span>Strinjam se s pravili objave in potrjujem, da je ocena poštena in resnična.</span>
+          <span> Strinjam se s <Link to="/pravila" style={{ textDecoration: "underline" }}>pravili objave</Link> in potrjujem, da je ocena poštena in resnična.</span>
         </label>
 
         <div className="actions">

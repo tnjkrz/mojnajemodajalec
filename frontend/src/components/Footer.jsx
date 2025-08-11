@@ -1,4 +1,5 @@
 // src/components/Footer.jsx
+import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <footer className="footer">
@@ -7,9 +8,8 @@ export default function Footer() {
           <div className="logo-dot" /> MojNajemodajalec © 2025
         </div>
         <div className="footer__links">
-          <a href="#pravila">Pravila</a>
-          <a href="#pogoji">Pogoji uporabe</a>
-          <a href="#zasebnost">Zasebnost</a>
+          <Link to="/pravila">Pravila</Link>
+          <Link to="/pravila">Zasebnost</Link>
         </div>
       </div>
     </footer>

@@ -8,6 +8,8 @@ import ReviewNew from "./pages/ReviewNew";
 import Footer from "./components/Footer";
 import PropertyShow from "./pages/PropertyShow";
 import Admin from "./pages/Admin";
+import AboutUs from "./pages/AboutUs"; 
+import Rules from "./pages/Rules";
 
 
 
@@ -29,6 +31,8 @@ export default function App() {
         <Route path="/reviews/new" element={<ReviewNew />} />
         <Route path="/properties/:id" element={<PropertyShow />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/about" element={<AboutUs />} /> 
+          <Route path="/pravila" element={<Rules />} />
 
         
   

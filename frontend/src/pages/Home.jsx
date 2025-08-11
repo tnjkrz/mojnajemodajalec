@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { api } from "../api";
 
 export default function Home() {
@@ -59,7 +59,7 @@ export default function Home() {
             <p className="hero__subtitle">
               MojNajemodajalec pomaga najemnikom deliti izkušnje z
               najemodajalci in pregledovati ocene drugih. Brez slik nepremičnin,
-              fokus je na izkušnji.
+              s poudarkom na izkušnji.
             </p>
 
             <form className="search" onSubmit={(e) => e.preventDefault()}>

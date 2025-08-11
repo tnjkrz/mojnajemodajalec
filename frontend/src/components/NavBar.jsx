@@ -11,7 +11,7 @@ export default function NavBar() {
         </div>
         <nav className="nav__links">
           <NavLink to="/" end>Domov</NavLink>
-          <NavLink to="/how-it-works">Kdo smo</NavLink>
+          <NavLink to="/about">O nas</NavLink>
           <NavLink to="/reviews/new" className="btn btn--ghost">Dodaj oceno</NavLink>
         </nav>
       </div>

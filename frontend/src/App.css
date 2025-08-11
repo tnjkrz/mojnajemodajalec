@@ -94,9 +94,9 @@ a {
 }
 
 .btn--solid {
-  background: var(--text);
+  background: var(--brand);
   color: #fff;
-  border-color: var(--text);
+  border-color: var(--brand);
   font-size: 16px;
 }
 
@@ -567,5 +567,27 @@ textarea.input {
   padding: 16px;
 }
 
+
+.table-wrap { width: 100%; overflow-x: auto; }
+
+/* let the browser size columns; header and body always match */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;     /* <— key change */
+  min-width: 980px;       /* prevents cramped columns; adjust if needed */
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 8px 6px;
+  border-top: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.admin-table thead th { border-top: none; }
+.break { word-break: break-word; overflow-wrap: anywhere; }
+.cell-strong { font-weight: 600; }
+.cell-muted { color: var(--muted); font-size: 12px; }
 
 

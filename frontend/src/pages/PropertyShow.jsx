@@ -37,8 +37,6 @@ export default function PropertyShow() {
     "Žaljiva vsebina",
     "Govor mržnje",
     "Kršitev zasebnosti (osebni podatki)",
-    "Napačne informacije",
-    "Neprimeren jezik",
     "Goljufija ali izsiljevanje",
     "Drugo",
   ];
@@ -121,7 +119,7 @@ export default function PropertyShow() {
         <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
           <button className="btn btn--ghost" onClick={() => openReport("property", property.property_id, address)}>🚩 Prijavi nepremičnino</button>
           <button className="btn btn--ghost" onClick={() => openReport("landlord", landlord.landlord_id, `${landlord.first_name} ${landlord.last_name}`)}>🚩 Prijavi najemodajalca</button>
-          <Link className="btn btn--solid" to="/reviews/new">Dodaj oceno</Link>
+          <Link className="btn btn--solid" style={{fontSize: "12px"}} to="/reviews/new">Dodaj oceno</Link>
         </div>
       </div>
 
@@ -165,7 +163,7 @@ export default function PropertyShow() {
       </section>
 
       {/* REVIEWS LIST */}
-      <section className="container" style={{ marginTop: 16 }}>
+      <section className="container" style={{ marginTop: 32 }}>
         <h3 style={{ margin: "0 0 12px" }}>Ocene uporabnikov</h3>
 
         {!reviews?.length && (
@@ -176,31 +174,31 @@ export default function PropertyShow() {
 
         {reviews?.map((r) => (
           <article key={r.review_id} className="card review-card">
-            <header className="review-head">
-              <div className="avatar">🙂</div>
+            <header className="review-head" style={{marginBottom: 20}}>
+              <div className="avatar">👤</div>
               <div className="who">
-                <div className="name">anonymous</div>
                 <div className="date small">{r.created_at ? new Date(r.created_at).toLocaleDateString() : ""}</div>
               </div>
               <div className="overall">
                 <div className="small" style={{ color: "var(--muted)" }}>Skupna ocena</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{display: "flex", alignItems: "center", gap: 8 }}>
                   <strong>{avgReview(r)}</strong>
                   <ReadOnlyStars value={avgReview(r)} size={14} />
                 </div>
               </div>
-              <button className="btn btn--ghost sm" onClick={() => openReport("review", r.review_id, `Ocena #${r.review_id}`)}>🚩 Prijavi oceno</button>
             </header>
 
-            {r.comment && <p className="review-text">{r.comment}</p>}
+            {r.comment && <p className="review-text" style={{marginLeft: 5}}>{r.comment}</p>}
 
-            <div className="grid-2">
+            <div className="grid-2" style={{ marginTop: 10 , marginBottom: 20}}>
               <div className="kv"><span>Komunikacija</span><ReadOnlyStars value={r.communication_score} size={14} /></div>
               <div className="kv"><span>Vzdrževanje in popravila</span><ReadOnlyStars value={r.repairs_score} size={14} /></div>
               <div className="kv"><span>Vselitev / izselitev</span><ReadOnlyStars value={r.moving_score} size={14} /></div>
               <div className="kv"><span>Zdravje in varnost</span><ReadOnlyStars value={r.health_safety_score} size={14} /></div>
               <div className="kv"><span>Zasebnost</span><ReadOnlyStars value={r.privacy_score} size={14} /></div>
             </div>
+            <button className="btn btn--ghost sm" onClick={() => openReport("review", r.review_id, `Ocena #${r.review_id}`)}>🚩 Prijavi oceno</button>
+
           </article>
         ))}
       </section>
